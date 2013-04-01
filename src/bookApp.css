@@ -1,0 +1,27 @@
+#readBook, #readBook.fullScreen {
+	width: 960px;
+	height: 92%;
+	margin: 0 auto;
+	/* Increasing the font size for legibility*/
+	font: 17px serif;
+	padding: 45px 45px 10px;
+	background: #0;
+	color: #A7EC21;
+	overflow: hidden;
+}
+
+table#books{
+	cursor: pointer;
+	/* 下面两个属性设置，使得表格居中 */
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#readBook a{
+	color: #fff;
+	text-decoration: none;
+}
+
+h3{
+	text-align: center;
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=gb2312" />
+		<title>BookReader Application</title>
+		<script type="text/javascript">
+			function arraytest (argument) {
+				var arr = new Array();
+				var book = {
+					name: "book",
+					author: "rainman"
+				};
+				book2 = {
+					name: "book",
+					author: "hello"
+				};
+				arr.push(book);
+				arr.push(book2);
+				var idx = arr.indexOf(book);
+				idx = arr.indexOf(book2);
+				arr.forEach(function(){
+					alert("hello");
+				});
+			}
+		</script>
+		<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="js/bookParaser.js"></script>
+		<script type="text/javascript">
+			$(document).ready(function($) {
+				$("button#Regx").click(function(){
+					var rows = $("tbody tr");
+					for (var i = 0; i < rows.length; i++) {
+						var cells = $(rows[i]).find("td");
+						$(cells[1]).text($(cells[0]).text());
+						filterDir($(cells[1]), pageFilter.diritem);
+					}
+				});
+			});
+		</script>
+	</head>
+	<body>
+		<button id="array" onclick="arraytest();">Array</button>
+		<button id="Regx">Regx Test</button>
+		<table>
+			<thead>
+				<tr>
+					<td>原始值</td>
+					<td>修改后</td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td>凡人修仙传无弹窗广告第82章 金光上人</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>赤城流浪的蛤蟆四十一、至爱至恨，至爱至毒！</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>九、邪道第一大派</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>大宇宙时代zhttty第二十四章：飞翔吧！希望！（上）（求推荐</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>第一集：远离的故乡 第一章：大乱！</td>
+					<td></td>
+				</tr>
+				<tr>
+					<td>第十章：最后一个人类政府！</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</body>
+</html>

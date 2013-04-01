@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta content="text/html; charset=gb2312" />
+		<title>BookReader Application</title>
+		<link rel="stylesheet" href="bookApp.css" type="text/css" />
+		<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="js/jquery.fullscreen.js"></script>
+		<script type="text/javascript" src="js/workerFileAPIWrapper.js"></script>
+		<script type="text/javascript" src="js/dirRefresh.js"></script>
+		<script type="text/javascript" src="js/bookParaser.js"></script>
+		<script type="text/javascript" src="js/bookView.js"></script>
+		<script type="text/javascript" src="js/bookmanager.js"></script>
+		<script type="text/javascript" src="js/bookReader.js"></script>
+	</head>
+	<body>
+		<div>
+			<button id="updateBook">
+				Update
+			</button>
+			<button id="showBook">Show book</button>
+			<button id="createDir">Create Dir</button>
+			<button id="writefile">Write File</button>
+			<button id="readfile">Read File</button>
+			<button id="geturl">Get File Url</button>
+			<button id="syncGetAllBook">Sync Get All Book</button>
+			<button id="downbook">Down Book</button>
+			<button id="fullscreen">Full Screen</button>
+			<button id="workerhttp">Worker Http</button>
+			<table id="books">
+				<thead>
+					<tr>
+						<th fieldid="bookname">书名</th>
+						<th fieldid="author">作者</th>
+						<th fieldid="bookmarkChart">书签</th>
+						<th fieldid="latestChart">最新章节</th>
+						<th fieldid="updateDate">最后更新</th>
+					</tr>
+				</thead>
+				<tbody></tbody>
+			</table>
+		</div>
+		
+		<div id="readBook">
+			<table id="readArea">
+				<tbody></tbody>
+			</table>
+		</div>
+
+		<div id="form-addBook">
+			<h1>添加书籍</h1>
+			<p>
+				将书籍添加到书架
+			</p>
+			<label for="bookname">书名：</label>
+			<div class="input-container">
+				<input type="text" name="bookname" id="name" />
+			</div>
+			<label for="email">作者：</label>
+			<div class="input-container">
+				<input type="text" name="email" id="email" />
+			</div>
+			<label>地址：</label>
+			<div class="input-container">
+				<input type="text" name="password" id="password" />
+			</div>
+			<button id="addbook" type="submit">
+				确认
+			</button>
+			<button type="submit">
+				取消
+			</button>
+		</div>
+	</body>
+</html>
