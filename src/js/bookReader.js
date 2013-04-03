@@ -25,6 +25,7 @@ $(document).ready(function() {
 			$('.close').click($.unblockUI);
 			var button = $("#form-delbook #delok")
 			currentBook = bookView.getBook($(data).parent());
+			$("#form-delbook p").text("你是否确认删除《" + currentBook.bookname + "》？");
 		}
 		else{
 			bookView.showBook(event);

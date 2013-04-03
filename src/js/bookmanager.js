@@ -99,6 +99,9 @@ var BookManager = function(options) {
 			dir = bookParaser.getFirstDir(content.data);
 			book.bookmarkChart = dir.text;
 			book.bookmarkChartUrl = book.chartRootUrl + dir.url;
+			dir = bookParaser.getDir(content.data);
+			book.bookname = dir.bookname;
+			book.author = dir.author;
 		}
 
 		var dt = new Date();
@@ -110,8 +113,8 @@ var BookManager = function(options) {
 			book.updateDate = dt.toLocaleDateString();
 			var books = bookCache.updateBook(book);
 			sendViewMessage("showBookShelf", books);
-			var dirs = bookParaser.getDir(content.data);
-			bookCache.updateDir(book, dirs);
+			var dir = bookParaser.getDir(content.data);
+			bookCache.updateDir(book, dir.items);
 		}
 
 		var str = dt.format("yyyy-MM-dd");
@@ -133,15 +136,15 @@ var BookManager = function(options) {
 	}
 
 	this.addBook = function(option) {
-		if (option.bookname == "" || option.chartRootUrl == "") {
+		if (option.chartRootUrl == "") {
 			return;
 		}
 		var book = bookCache.createBook();
 		book.bookname = option.bookname;
 		book.author = option.author;
 		book.chartRootUrl = option.chartRootUrl;
-		var books = bookCache.addBook(book);
-		sendViewMessage("showBookShelf", books);
+		//var books = bookCache.addBook(book);
+		//sendViewMessage("showBookShelf", books);
 
 		dirRefresher.getBookDir(book);
 	};

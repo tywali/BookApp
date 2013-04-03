@@ -8,13 +8,19 @@ var chartFormat = {
 
 var pageFilter = {
  		"bookname" : {
-			"find" : ["h1.bname"],
-			"del" : [""],
+			"find" : ["h1.bname", "h1"],
+			"del" :  [""],
+			"repl" : [
+				[" 全文阅读更新列表", ""],
+			],
  		},
 
  		"author" : {
-			"find" : ["div:contains('作者：')"],
+			"find" : ["h3:contains('作者')", "div:contains('作者')"],
 			"del" : [""],
+			"repl" : [
+				["作者：", ""],
+			],
  		},
 
 		"content" : {
@@ -44,7 +50,7 @@ var pageFilter = {
 
  		"diritem" : {
  			"repl" : [
- 				["[（【].*?[求更补].*", ""],
+ 				["[{（【].*?[求更补票].*", ""],
  				["全文阅读", ""],
  			],
  			"head" : [
@@ -75,11 +81,21 @@ var BookParaser = function(){
 
 	var parase = function(sornode, parm){
 		var content;
+		//子元素查找
 		for(var i in parm.find){
 			content = sornode.find(parm.find[i]);
 			if (content.length > 0){
 				break;
 			}
+		}
+		if (content.length == 0){
+			// 同级查找
+			for (var i in parm.find) {
+				content = sornode.next(parm.find[i]);
+				if (content.length > 0){
+					break;
+				}
+			};
 		}
 		for(var i in parm.del){
 			var node = content.find(parm.del[i]);
@@ -111,11 +127,24 @@ var BookParaser = function(){
 	}
 	
 	var paraseDir = function(srcnode){
-		var bookname = parase(srcnode, pageFilter.bookname);
-		var author = parase(srcnode, pageFilter.author);
-		var items = parase(srcnode, pageFilter.dir);
+		var dir = {
+			bookname : "",
+			author : "",
+			items : "",
+		};
+		dir.bookname = parase(srcnode, pageFilter.bookname);
+		if (dir.bookname.length > 0){
+			dir.bookname = dir.bookname[0].innerHTML;
+			dir.bookname = replaceString(pageFilter.bookname.repl, dir.bookname);
+		}
+		dir.author = parase(srcnode, pageFilter.author);
+		if (dir.author.length > 0){
+			dir.author = dir.author[0].innerHTML;
+			dir.author = replaceString(pageFilter.author.repl, dir.author);
+		}
+		dir.items = parase(srcnode, pageFilter.dir);
 
-		return items;
+		return dir;
 	};
 	
 	var getChartRoot = function(url){
@@ -129,17 +158,17 @@ var BookParaser = function(){
 			return bookdir;
 		}
 
-		if (bookdir.length > 0){
+		if (bookdir.items.length > 0){
 			if (index == "first"){
 				index = 0;
 			}
 			else if (index == "last"){
-				index = bookdir.length - 1;
+				index = bookdir.items.length - 1;
 			}
 			else{
 				index = parseInt(index);
 			}
-			var item = bookdir[index];
+			var item = bookdir.items[index];
 			formatTitle(item, pageFilter.diritem);
 			var dir = {
 				"url" : "",
@@ -177,12 +206,23 @@ var BookParaser = function(){
 				"bookname" : "",
 				"author" : "",			
 			};
-			dir.bookdir = paraseDir($(data));
+			dir.bookdir = paraseDir($(data)).items;
 			for (var i = 0; i < dir.bookdir.length; i++) {
 				formatTitle(dir.bookdir[i], pageFilter.diritem);
 			};
 			return dir;
 		}
+	};
+
+	var replaceString = function(fmt, text){
+		var find, repl, regx;
+		for (var i = 0; i < fmt.length; i++){
+			find = fmt[i][0];
+			repl = fmt[i][1];
+			regx = new RegExp(find, "g");
+			text = text.replace(regx, repl);
+		}
+		return text;
 	};
 
 	var formatTitle = function(node, rule){
@@ -206,12 +246,8 @@ var BookParaser = function(){
 		}
 
 		// 去掉后面无用的文字
-		for (var i = 0; i < rule.repl.length; i++) {
-			var find = rule.repl[i][0];
-			var repl = rule.repl[i][1];
-			var regx = new RegExp(find, "g");
-			text = text.replace(regx, repl);
-		};
+		text = replaceString(rule.repl, text);
+
 		node.html(text);
 		return node;
 	}
