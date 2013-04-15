@@ -98,27 +98,30 @@ var BookManager = function(options) {
 		if (book.bookmarkChart == null) {
 			dir = bookParaser.getFirstDir(content.data);
 			book.bookmarkChart = dir.text;
-			book.bookmarkChartUrl = book.chartRootUrl + dir.url;
+			//book.bookmarkChartUrl = book.chartRootUrl + dir.url;
+			book.bookmarkChartUrl = combinUrl(book.chartRootUrl, dir.url);
 			dir = bookParaser.getDir(content.data);
 			book.bookname = dir.bookname;
 			book.author = dir.author;
 		}
 
 		var dt = new Date();
+		var dtfmt = "yyyy年MM月dd日";
 		dir = bookParaser.getLastDir(content.data);
-		dir.url = book.chartRootUrl + dir.url;
+		//dir.url = book.chartRootUrl + dir.url;
+		dir.url = combinUrl(book.chartRootUrl, dir.url);
 		if (book.latestChart != dir.text || book.latestChartUrl != dir.url) {
 			book.latestChartUrl = dir.url;
 			book.latestChart = dir.text;
-			book.updateDate = dt.toLocaleDateString();
+			book.updateDate = dt.format(dtfmt);	//dt.toLocaleDateString();
 			var books = bookCache.updateBook(book);
 			sendViewMessage("showBookShelf", books);
 			var dir = bookParaser.getDir(content.data);
 			bookCache.updateDir(book, dir.items);
 		}
 
-		var str = dt.format("yyyy-MM-dd");
-		if (book.updateDate == dt.toLocaleDateString()) {
+		//if (book.updateDate == dt.toLocaleDateString() {
+		if (book.updateDate == dt.format(dtfmt)){
 			updateNum++;
 			showUpdateNum(updateNum);
 		}

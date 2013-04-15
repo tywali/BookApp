@@ -10,18 +10,56 @@
 	overflow: hidden;
 }
 
-table#books{
-	cursor: pointer;
-	/* 下面两个属性设置，使得表格居中 */
-	margin-left: auto;
-	margin-right: auto;
-}
-
 #readBook a{
 	color: #fff;
 	text-decoration: none;
 }
 
+table#readArea {
+	width: 100%;
+}
+
+table#readArea td{
+	width: 25%;
+}
+
 h3{
 	text-align: center;
 }
+
+table#books{
+	width: 80%;
+	cursor: pointer;
+	border-collapse:collapse;
+	/* 下面两个属性设置，使得表格居中 */
+	margin-left: auto;
+	margin-right: auto;
+}
+
+table#books .hover{
+	background-color:#666; 
+	color:#FFF;
+}
+
+table#books .action{
+	width: 25px;
+}
+
+/* 这样设置，可以让表格内图片水平居中 */
+table#books img{
+	margin: 0 auto;
+}
+
+table#books .hover img{
+	display: block;
+}
+
+table#books img{
+	display: none;
+}
+
+/*
+table, th, td, tr{
+	border: 1px solid;
+}
+*/

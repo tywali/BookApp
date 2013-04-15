@@ -152,6 +152,7 @@ var BookCache = function(){
 		}
 		else {
 			return -book_1.updateDate.localeCompare(book_2.updateDate);
+			//return book_1.updateDate < book_2.updateDate;
 		}
 	};
 

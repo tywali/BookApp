@@ -5,8 +5,19 @@ var BookShelfView = function(options){
 		bookGrid = options.shelfArea;
 	};
 
+	var addImage = function(node, name){
+		//var div = $("<div></div>");
+	    var img = $("<img />");
+	    img.attr("src", "images/" + name + ".png");
+	    img.attr("action", name);
+	    //div.append(img);
+	    node.append(img);
+	    node.addClass("action");
+	    //node.css("float", "left");
+	};
+
 	this.showBookShelf = function(books){
-		this.clearShelf();
+		clearShelf();
 		// 使用文档碎片技术提升性能
 		var oFragment = $("<fragment></fragment>");
 		for (var i = 0; i < books.length; i++){
@@ -17,42 +28,61 @@ var BookShelfView = function(options){
 		        var fieldName = $(this).attr("fieldid");
 		        var node = $("<td></td>");
 		        var cell = node;//$(node).find("a");
-		        $(cell).text(book[fieldName]);
-		        if (book[fieldName + "Url"]){
-		        	$(cell).attr("href", book[fieldName + "Url"]);
+		        if (fieldName){
+			        $(cell).text(book[fieldName]);
 		        }
 		        else{
-		        	$(cell).attr("href", book["chartRootUrl"]);
+		        	fieldName = $(this).attr("action");
+		        	addImage(node, fieldName);
 		        }
 		        $(row).append(node);
 		    });
-		    var node = $("<td></td>");
-		    var img = $("<img />");
-		    img.attr("src", "images/del.png");
-		    img.attr("action", "del");
-		    node.append(img);
-		    $(row).append(node);
-		    $(row).attr("bookname", book["bookname"]);
 		    row[0].book = book;
 		    oFragment.append(row);
 		}
 	    $(bookGrid).append(oFragment.find("tr"));
+	    mouseHover();
 	};
 	
-	this.clearShelf = function(){
+	var clearShelf = function(){
 		$(bookGrid).find("tbody").empty();
 	};
 	
 	this.getBook = function(node){
-		var row = $(node).parent();
+		var tag;
+		do {
+			node = $(node).parent();
+			tag = $(node)[0].tagName;
+		} while(tag != "TR");
+		var row = node;
 		var book =  $(row)[0].book;
 		return book;
 	};
 	
 	this.getUrl = function(node){
-		return $(node).attr("href");
+		node = $(node);
+		var index = node.index();
+		var th = $(bookGrid).find("th:eq(" + index + ")");
+		var fieldid = th.attr("fieldid");
+		var book = this.getBook(node);
+		if (book[fieldid + "Url"]){
+			return book[fieldid + "Url"];
+		}
+		else{
+			return book["chartRootUrl"];
+		}
 	};
-	
+
+	var mouseHover = function(){
+		var rows = $(bookGrid).find("tbody tr");
+		$(rows).hover(function(event){
+			$(this).addClass("hover");
+		}, 
+		function(event){
+			$(this).removeClass("hover");
+		});
+	};
+
 	init(options);
 };
 
@@ -96,7 +126,7 @@ var BookView = function(options){
 			if (href){
 				//阻止链接的自动跳转
 				e.preventDefault();
-				var url = currentBook.chartRootUrl + href;
+				var url = combinUrl(currentBook.chartRootUrl, href);
 				innerArea.empty();
 				retrieve(url, currentBook);
 			}
