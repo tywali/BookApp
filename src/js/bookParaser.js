@@ -5,9 +5,17 @@ var chartFormat = {
 		["[wWｗＷ]{3}.*?[cCｃ][oOｏ][mMＭ]\d*[,]*", ""],
 		["．ｃｏｍ", ""], 
 		["无错小说网不跳字", ""],
-		["十[之有]\\*\\*", "十之八九"],
 	],
 };
+
+var chartReplKeys = [
+		["十之**", "十之八九"],
+		["十有**", "十有八九"],
+		["强横**", "强横肉体"],
+		["拟容**", "拟容大法"],
+		["玄魔**", "玄魔大法"],
+		["**不离", "八九不离"],
+	];
 
 var pageFilter = {
 	"bookname": {
@@ -73,6 +81,8 @@ function formatBook(content, rule) {
 }
 
 var BookParaser = function() {
+	var chartFormater = new BookFormat(chartReplKeys);
+
 	var urlIsChart = function(url) {
 		var pos = url.lastIndexOf("/");
 		if (pos == (url.length - 1)) {
@@ -217,6 +227,7 @@ var BookParaser = function() {
 			chart.next = combinUrl(chart.root, chart.next);
 			chart.prev = combinUrl(chart.root, chart.prev);
 			chart.content = formatBook(chart.content, chartFormat.rep);
+			chart.content = chartFormater.format(chart.content);
 			return chart;
 		} else {
 			var dir = {

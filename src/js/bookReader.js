@@ -80,14 +80,6 @@ $(document).ready(function() {
 	
 	$('#addbook').click(function(event){
 		addBook();
-		/*
-		$.blockUI({
-			message : $('#form-addBook')
-		});
-		$('.blockOverlay').attr('title', 'clickclose').click($.unblockUI);
-		$('.close').click($.unblockUI);
-		$("#form-addBook input").val("");
-		*/
 	});
 	
 	$(".genform .cancel").click(function() {
@@ -105,6 +97,7 @@ $(document).ready(function() {
 		});
 		$.unblockUI();
 	});
-	
+
+	//background.bookFormatTest();	
 });
 

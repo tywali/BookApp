@@ -16,6 +16,7 @@
 			"js/workerFileAPIWrapper.js",
 			"js/bookDatabase.js", 
 			"js/dirRefresh.js",
+			"js/bookFormat.js",
 			"js/bookParaser.js",
 			"js/bookManager.js"
 		]
