@@ -98,6 +98,10 @@ $(document).ready(function() {
 		$.unblockUI();
 	});
 
-	//background.bookFormatTest();	
+	$("button#test").click(function(){
+		//background.bookFormatTest();
+		//background.testLog();
+		background.testExportConfig();
+	});
 });
 

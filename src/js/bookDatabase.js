@@ -61,7 +61,7 @@ var BookDatabase = function(){
 	var openDatabase = function(parm, callback){
 		openCallback = callback;
 		openFinish = false;
-		var request = window.indexedDB.open("BookDatabase", 3);
+		var request = window.indexedDB.open("BookDatabase", 4);
 		
 	    request.onerror = errorHandler;
 		request.onsuccess = function(event){
@@ -70,19 +70,52 @@ var BookDatabase = function(){
 			openCallback();
 		};
 		request.onupgradeneeded = function(event){
+			var bookTables = {
+				"table":[
+					//书籍表
+					{
+					"name":"books", 
+					"keyPath":{ keyPath: "bookname" },
+					"idx": [{"name":"books_bookname", "keyPath":"bookname", "param":{ unique: true }},
+							{"name":"books_author", "keyPath":"author", "param":{ unique: false }}]
+					}, 
+					//格式化规则表
+					{
+					"name":"formatRule", 
+					"keyPath":{ keyPath: ["category", "type"] },
+					"idx": [{"name":"rule_idx", "keyPath":["category", "type"], "param":{ unique: true }}],
+					}
+				]
+			};
+
 			bookDatabase = event.target.result;
-			
-			//创建书籍表
-			var objectStore = bookDatabase.createObjectStore("books", { keyPath: "bookname" });
-			objectStore.createIndex("books_bookname", "bookname", { unique: true });
-			objectStore.createIndex("boks_author", "author", { unique: false });
-			
-			//创建网站表
-			objectStore = bookDatabase.createObjectStore("booksite", { keyPath: "url" });
-			objectStore.createIndex("booksite_url", "url", { unique: true });
+
+			for (var i = 0; i < bookTables.table.length; i++){
+				createTable(bookTables.table[i]);
+			}
 		};
+
 	};
-	
+
+	var isTableExist = function(name){
+		for (var i = 0; i < bookDatabase.objectStoreNames.length; i++){
+			if (bookDatabase.objectStoreNames[i] == name){
+				return true;
+			}
+		}
+		return false;
+	};
+
+	var createTable = function(options){
+		if (!isTableExist(options.name)){
+			var objectStore;
+			objectStore = bookDatabase.createObjectStore(options.name, options.keyPath);
+			for (var i = 0; i < options.idx.length; i++){
+				objectStore.createIndex(options.idx[i].name, options.idx[i].keyPath, options.idx[i].param);
+			}
+		}
+	};
+
 	var getObjectStore = function(name){
 		return bookDatabase.transaction(name, "readwrite").objectStore(name);
 	};
@@ -120,6 +153,11 @@ var BookDatabase = function(){
 	this.getAllBook = function(callback){
 		books = new Array();
 		commandQueue.push(_getAllBook, null, callback);
+	};
+
+	this.addRule = function(){
+		var rule = getObjectStore("formatRule");
+		//rule.put({});
 	};
 	
 	commandQueue.push(openDatabase, null, null);
@@ -214,6 +252,7 @@ var BookCache = function(){
 		return this.getBook(-1);
 	};
 
+	/* 取消本地文件形式保存目录
 	this.updateDir = function(book, bookdir){
 		var node;
 		var len = bookdir.length;
@@ -230,6 +269,7 @@ var BookCache = function(){
 		oFragment.append(node);
 		fileAPI.writeFile(book.bookname, oFragment.html(), "replace");
 	}
+	*/
 
 	this.isOpenOver = function(){
 		return isRetrieveOver;

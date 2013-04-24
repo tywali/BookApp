@@ -11,7 +11,7 @@ Date.prototype.format = function(fmt) { //author: meizz
 	if (/(y+)/.test(fmt)) {
 		fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
 	}
-	for (var k in o){
+	for (var k in o) {
 		if (new RegExp("(" + k + ")").test(fmt)) {
 			fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
 		}
@@ -113,15 +113,15 @@ var BookManager = function(options) {
 		if (book.latestChart != dir.text || book.latestChartUrl != dir.url) {
 			book.latestChartUrl = dir.url;
 			book.latestChart = dir.text;
-			book.updateDate = dt.format(dtfmt);	//dt.toLocaleDateString();
+			book.updateDate = dt.format(dtfmt); //dt.toLocaleDateString();
 			var books = bookCache.updateBook(book);
 			sendViewMessage("showBookShelf", books);
-			var dir = bookParaser.getDir(content.data);
-			bookCache.updateDir(book, dir.items);
+			//var dir = bookParaser.getDir(content.data);
+			//bookCache.updateDir(book, dir.items);
 		}
 
 		//if (book.updateDate == dt.toLocaleDateString() {
-		if (book.updateDate == dt.format(dtfmt)){
+		if (book.updateDate == dt.format(dtfmt)) {
 			updateNum++;
 			showUpdateNum(updateNum);
 		}
@@ -162,7 +162,42 @@ var BookManager = function(options) {
 		bookView = view;
 	};
 
+	this.exportConfig = function() {
+		var cache = bookCache.getBook();
+		var out = JSON.stringify(cache);
+	};
+
 	init(options);
 };
 
 bookManager = new BookManager();
+
+function testExportConfig() {
+	//bookManager.exportConfig();
+	var blobBuilder = new Blob(["我今天只说三句话；this is true"]);
+
+	//var url = window.URL.createObjectURL(blobBuilder); // 返回Blob对象并以此创建URL  
+	//var data = "data:x-application/text," + encodeURIComponent("我今天只说三句话；呵呵", "test.txt");
+	//window.open(data); // 通过URL打开这个Blob对象 
+	saveAs(blobBuilder, "a.txt");
+	//chrome.downloads.download({url: "data.txt", saveAs: true});
+}
+
+function saveAs(blob, filename) {
+	var type = blob.type;
+	var force_saveable_type = 'application/octet-stream';
+	if (type && type != force_saveable_type) { // 强制下载，而非在浏览器中打开
+		var slice = blob.slice || blob.webkitSlice || blob.mozSlice;
+		blob = slice.call(blob, 0, blob.size, force_saveable_type);
+	}
+
+	var url = URL.createObjectURL(blob);
+	var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+	save_link.href = url;
+	save_link.download = filename;
+
+	var event = document.createEvent('MouseEvents');
+	event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	save_link.dispatchEvent(event);
+	URL.revokeObjectURL(url);
+}

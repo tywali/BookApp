@@ -3,18 +3,23 @@ var chartFormat = {
 		["&amp;", "&"],
 		["amp;", ""],
 		["[wWｗＷ]{3}.*?[cCｃ][oOｏ][mMＭ]\d*[,]*", ""],
-		["．ｃｏｍ", ""], 
-		["无错小说网不跳字", ""],
-	],
+		["．ｃｏｍ", ""],
+		["无错小说网不跳字", ""], ],
 };
 
 var chartReplKeys = [
-		["十之**", "十之八九"],
-		["十有**", "十有八九"],
-		["强横**", "强横肉体"],
-		["拟容**", "拟容大法"],
-		["玄魔**", "玄魔大法"],
-		["**不离", "八九不离"],
+	["十之**", "十之八九"],
+	["十有**", "十有八九"],
+	["强横**", "强横肉体"],
+	["拟容**", "拟容大法"],
+	["玄魔**", "玄魔大法"],
+	["小**诀", "小云雨诀"],
+	["一个**上半身", "一个赤裸上半身"],
+	["，所不辞", "，在所不辞"],
+	["战斗**", "战斗欲望"],
+	["进取**", "进取欲望"],
+	["半身**", "半身赤裸"],
+	["经**力", "经大法力"],
 	];
 
 var pageFilter = {
@@ -30,7 +35,7 @@ var pageFilter = {
 		"del": [""],
 		"repl": [
 			["&nbsp;", ""],
-			["作者：", ""], 
+			["作者：", ""],
 			["<.*", ""]
 		],
 	},
@@ -160,7 +165,7 @@ var BookParaser = function() {
 		var author;
 		var author1 = find(srcnode, "next", pageFilter.author);
 		var author2 = find(srcnode, "find", pageFilter.author);
-		if (author1.length > 0 && author2.length > 0){
+		if (author1.length > 0 && author2.length > 0) {
 			author1 = author1[0].innerHTML;
 			author2 = author2[0].innerHTML;
 			author = (author1.length < author2.length) ? author1 : author2;
@@ -207,12 +212,18 @@ var BookParaser = function() {
 	};
 
 	this.getLastDir = function(srcnode) {
-		var dir = this.getDir(srcnode, "last");
-		if (dir.text == ""){
-			var page = this.getDir(srcnode);
-			dir = this.getDir(srcnode, page.items.length - 2);
+		try {
+			var dir = this.getDir(srcnode, "last");
+			if (dir.text == "") {
+				var page = this.getDir(srcnode);
+				dir = this.getDir(srcnode, page.items.length - 2);
+			}
+			return dir;
+		} catch (err) {
+			Log.log(err);
 		}
-		return dir;
+
+		return null;
 	};
 
 	this.getFirstDir = function(srcnode) {
@@ -260,7 +271,7 @@ var BookParaser = function() {
 			return node;
 		}
 		node = $(node);
-		if (node.length == 0){
+		if (node.length == 0) {
 			return node;
 		}
 		var text = node.html();

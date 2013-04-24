@@ -34,7 +34,7 @@ var BookFormat = function(strKeys) {
         var arrMatch = [];
         var res = "";
 
-        while (i < n) {
+        while (i < content.length) {
             tblCur = tblRoot;
             p = i;
             v = 0;
@@ -44,11 +44,6 @@ var BookFormat = function(strKeys) {
                 tblCur = tblCur[c];
                 if (!tblCur) {
                     i++;
-                    if (!tblPrev) {
-                        res = res.concat(c);
-                    } else if (!tblPrev.end) {
-                        res = res.concat(c);
-                    }
                     break;
                 }
 
@@ -61,15 +56,17 @@ var BookFormat = function(strKeys) {
 
             //最大匹配
             if (v) {
-                //arrMatch.push(i - 1, v);
-                res = res.concat(tblPrev.repl);
-                arrMatch.push(res);
-                i = v;
+                var sorLen, desLen;
+                sorLen = v - i + 1;
+                desLen = tblPrev.repl.length;
+                res = content.slice(v, content.length);
+                content = content.slice(0, i - 1).concat(tblPrev.repl).concat(res);
+                i = v - sorLen + desLen;
                 tblPrev = null;
             }
         }
 
-        return res;
+        return content;
     };
 
     init(strKeys);
@@ -79,13 +76,17 @@ function bookFormatTest() {
     var keys = [
         ["十有**", "十有八九"],
         ["十之**", "十之八九"],
-        ["十有**的", "十有八九的"], ];
+        ["十有**的", "十有八九的"], 
+        ["燃文阅读", ""],
+        ];
     var fmt = new BookFormat(keys);
-    var strSor = "嗯，十有**就是他了，我已经了解了十之**了，十有**的把握搞定。";
-    var strDes = "嗯，十有八九就是他了，我已经了解了十之八九了，十有八九的把握搞定。";
+    var strSor = "嗯，燃文阅读十天，十有**就是他了，我已经了解了十之**了，十有**的把握搞定。";
+    var strDes = "嗯，十天，十有八九就是他了，我已经了解了十之八九了，十有八九的把握搞定。";
 
     var find = fmt.format(strSor);
     if (find != strDes) {
-        console.log("replace error!");
+        console.log("format error!");
+        console.log("sor:" + strDes);
+        console.log("des:" + find);
     }
 }
