@@ -1,35 +1,37 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta content="text/html; charset=gb2312" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>BookReader Application</title>
-		<link rel="stylesheet" href="bookApp.css" type="text/css" />
-		<link rel="stylesheet" href="formframe.css" type="text/css" />
-		<link rel="stylesheet" href="style.css" type="text/css" />
+		<link rel="stylesheet" type="text/css" href="bookApp.css" />
+		<link rel="stylesheet" type="text/css" href="formframe.css" />
+		<link rel="stylesheet" type="text/css" href="style.css" />
 		<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
 		<script type="text/javascript" src="js/jquery.fullscreen.js"></script>
 		<script type="text/javascript" src="js/jquery.mousewheel.js"></script>
 		<script type="text/javascript" src="js/interface.js"></script>
 		<script type="text/javascript" src="js/jquery.blockUI.js"></script>
+		<script type="text/javascript" src="js/jquery.contextMenu.js"></script>
 		<script type="text/javascript" src="js/functions.js"></script>
+		<script type="text/javascript" src="js/i18n.js"></script>
 		<script type="text/javascript" src="js/workerFileAPIWrapper.js"></script>
+		<script type="text/javascript" src="js/gridView.js"></script>
 		<script type="text/javascript" src="js/bookView.js"></script>
-		<!--
-		<script type="text/javascript" src="js/bookmanager.js"></script>
-		`-->
 		<script type="text/javascript" src="js/bookAction.js"></script>
 		<script type="text/javascript" src="js/bookReader.js"></script>
 	</head>
 	<body>
+		<button id="test">Test</button>
+		<button id="ruletest">Rule Test</button>
 		<div>
-			<table id="books">
+			<table id="gridList">
 				<thead>
 					<tr>
-						<th fieldid="bookname">书名</th>
-						<th fieldid="author">作者</th>
-						<th fieldid="bookmarkChart">书签</th>
-						<th fieldid="latestChart">最新章节</th>
-						<th fieldid="updateDate">最后更新</th>
+						<th fieldid="bookname" i18nkey="text.bookname"></th>
+						<th fieldid="author" i18nkey="text.author"></th>
+						<th fieldid="bookmarkChart" i18nkey="text.bookmark"></th>
+						<th fieldid="latestChart" i18nkey="text.latest.chart"></th>
+						<th class="datecol" fieldid="updateDate" i18nkey="text.latest.update"></th>
 						<th class="action" action="del"></th>
 						<th class="action" action="edit"></th>
 					</tr>
@@ -45,43 +47,37 @@
 		</div>
 
 		<div id="form-addBook" class="genform">
-			<h1>添加书籍</h1>
-			<p>
-				将书籍添加到书架
-			</p>
-			<label for="bookname">书名：</label>
+			<h1 i18nkey="text.add.title"></h1>
+			<p i18nkey="text.add.description"></p>
+			<label i18nkey="text.add.bookname"></label>
 			<div class="input-container">
 				<input type="text" name="bookname" id="name" />
 			</div>
-			<label for="email">作者：</label>
+			<label i18nkey="text.add.author"></label>
 			<div class="input-container">
 				<input type="text" name="author" id="author" />
 			</div>
-			<label>地址：</label>
+			<label i18nkey="text.add.address"></label>
 			<div class="input-container">
 				<input type="text" name="address" id="address" />
 			</div>
-			<button id="addbookok" type="submit">
-				确认
-			</button>
-			<button class="cancel" type="submit">
-				取消
-			</button>
+			<button id="addbookok" type="submit" i18nkey="text.common.ok"></button>
+			<button class="cancel" type="submit" i18nkey="text.common.cancel"></button>
 		</div>
 
 		<div id="form-delbook" class="genform">
-			<h1>删除书籍</h1>
+			<h1 i18nkey="text.del.title"></h1>
 			<p>
-				从书架删除当前书籍
+				<span i18nkey="text.del.description.1"></span><span id="delbook"></span><span i18nkey="text.del.description.2"></span>
 			</p>
-			<button id="delok">确认</button>
-			<button class="cancel">取消</button>
+			<button id="delok" i18nkey="text.common.ok"></button>
+			<button class="cancel" i18nkey="text.common.cancel"></button>
 		</div>
 
 		<div class="dock" id="dock2">
 		  <div class="dock-container">
-			  <a class="dock-item2" href="#" id="addbook"><span>添加书籍</span><img src="images/home.png" alt="home" /></a> 
-			  <a class="dock-item2" href="#"><span>参数设置</span><img src="images/email.png" alt="contact" /></a> 
+			  <a class="dock-item2" href="#" id="addbook"><span i18nkey="text.add.title"></span><img src="images/home.png" alt="home" /></a> 
+			  <a class="dock-item2" href="#" id="config"><span i18nkey="text.config.param"></span><img src="images/email.png" alt="contact" /></a> 
 			  <a class="dock-item2" href="#"><span>Portfolio</span><img src="images/portfolio.png" alt="portfolio" /></a> 
 			  <a class="dock-item2" href="#"><span>Music</span><img src="images/music.png" alt="music" /></a> 
 			  <a class="dock-item2" href="#"><span>Video</span><img src="images/video.png" alt="video" /></a> 
@@ -92,6 +88,12 @@
 			  <a class="dock-item2" href="#"><span>RSS2</span><img src="images/rss2.png" alt="rss" /></a> 
 		  </div>
 		</div>
-		<button id="test">Test</button>
+		<div class="contextMenu" id="readMenu">
+			<ul>
+				<li id="open">Open</li>
+				<li id="save">Save</li>
+				<li id="rename"><input type="text" name="bookname" id="renames"/></li>
+			</ul>
+		</div>
 	</body>
 </html>

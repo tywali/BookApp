@@ -2,20 +2,46 @@
 <html>
 	<head>
 		<meta content="text/html; charset=utf-8" />
-		<link rel="stylesheet" href="format.css" type="text/css" />
+		<link rel="stylesheet" href="bookApp.css" type="text/css" />
+		<script type="text/javascript" src="js/jquery-1.8.2.js"></script>
+		<script type="text/javascript" src="js/gridView.js"></script>
+		<script type="text/javascript" src="js/bookView.js"></script>
+		<script type="text/javascript" src="js/bookConfig.js"></script>
 	</head>
 	<body>
 		<div>
 			<h3>章节格式化规则</h3>
-			<table>
+			<table id="gridList">
 				<thead>
 					<tr>
-						<th>查找</th>
-						<th>替换</th>
+						<th fieldid="search">查找</th>
+						<th fieldid="replace">替换</th>
+						<th class="action" action="del"></th>
 					</tr>
 				</thead>
-				<tbody></tbody>
+				<tbody>
+					<tr>
+						<td>hello</td>
+						<td>what</td>
+						<td class="action" action="add"><img src="images/del.png" /></td>
+					</tr>
+					<tr>
+						<td>hello</td>
+						<td>what</td>
+						<td class="action" action="add"><img src="images/del.png" /></td>
+					</tr>
+					<tr>
+						<td>hello</td>
+						<td>what</td>
+						<td class="action" action="add"><img src="images/del.png" /></td>
+					</tr>
+				</tbody>
 			</table>
 		</div>
+		<div>
+			<button id="addRule">添加</button>
+			<button id="saveRule">保存</button>
+		</div>
+		<input id="gridInput" type="text"/>
 	</body>
 </html>

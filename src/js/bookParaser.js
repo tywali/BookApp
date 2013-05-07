@@ -15,7 +15,6 @@ var chartReplKeys = [
 	["玄魔**", "玄魔大法"],
 	["小**诀", "小云雨诀"],
 	["一个**上半身", "一个赤裸上半身"],
-	["，所不辞", "，在所不辞"],
 	["战斗**", "战斗欲望"],
 	["进取**", "进取欲望"],
 	["半身**", "半身赤裸"],
@@ -42,11 +41,11 @@ var pageFilter = {
 
 	"content": {
 		"find": ["div#content", "#contents", "div#htmlContent"],
-		"del": ["script", "img"],
+		"del": ["script", "div.bookname"],
 	},
 
 	"title": {
-		"find": ["div#title", "h1"],
+		"find": ["div#title", "div#content h2", "h1"],
 		"del": ["a"],
 	},
 
@@ -61,7 +60,7 @@ var pageFilter = {
 	},
 
 	"dir": {
-		"find": ["span.c a", "div.dccss a", "li a"],
+		"find": ["span.c a", "div.dccss a", "div.booklist span a", "li a"],
 		"del": [],
 	},
 
@@ -166,10 +165,11 @@ var BookParaser = function() {
 		var author1 = find(srcnode, "next", pageFilter.author);
 		var author2 = find(srcnode, "find", pageFilter.author);
 		if (author1.length > 0 && author2.length > 0) {
-			author1 = author1[0].innerHTML;
-			author2 = author2[0].innerHTML;
+			author1 = $(author1).text();	//[0].innerHTML;
+			author2 = $(author2).text();	//[0].innerHTML;
 			author = (author1.length < author2.length) ? author1 : author2;
 			author = replaceString(pageFilter.author.repl, author);
+			author = author.trim();
 		}
 		dir.author = author;
 
@@ -294,5 +294,5 @@ var BookParaser = function() {
 
 		node.html(text);
 		return node;
-	}
+	};
 };

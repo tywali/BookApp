@@ -116,11 +116,8 @@ var BookManager = function(options) {
 			book.updateDate = dt.format(dtfmt); //dt.toLocaleDateString();
 			var books = bookCache.updateBook(book);
 			sendViewMessage("showBookShelf", books);
-			//var dir = bookParaser.getDir(content.data);
-			//bookCache.updateDir(book, dir.items);
 		}
 
-		//if (book.updateDate == dt.toLocaleDateString() {
 		if (book.updateDate == dt.format(dtfmt)) {
 			updateNum++;
 			showUpdateNum(updateNum);
@@ -146,8 +143,6 @@ var BookManager = function(options) {
 		book.bookname = option.bookname;
 		book.author = option.author;
 		book.chartRootUrl = option.chartRootUrl;
-		//var books = bookCache.addBook(book);
-		//sendViewMessage("showBookShelf", books);
 
 		dirRefresher.getBookDir(book);
 	};
@@ -162,9 +157,15 @@ var BookManager = function(options) {
 		bookView = view;
 	};
 
-	this.exportConfig = function() {
+	this.exportDB = function() {
 		var cache = bookCache.getBook();
 		var out = JSON.stringify(cache);
+		var blob = new Blob([out]);
+		saveAs(blob, "readerConfig.txt");
+	};
+
+	this.getConfig = function() {
+		//var cache = bookCache.
 	};
 
 	init(options);
@@ -173,31 +174,5 @@ var BookManager = function(options) {
 bookManager = new BookManager();
 
 function testExportConfig() {
-	//bookManager.exportConfig();
-	var blobBuilder = new Blob(["我今天只说三句话；this is true"]);
-
-	//var url = window.URL.createObjectURL(blobBuilder); // 返回Blob对象并以此创建URL  
-	//var data = "data:x-application/text," + encodeURIComponent("我今天只说三句话；呵呵", "test.txt");
-	//window.open(data); // 通过URL打开这个Blob对象 
-	saveAs(blobBuilder, "a.txt");
-	//chrome.downloads.download({url: "data.txt", saveAs: true});
-}
-
-function saveAs(blob, filename) {
-	var type = blob.type;
-	var force_saveable_type = 'application/octet-stream';
-	if (type && type != force_saveable_type) { // 强制下载，而非在浏览器中打开
-		var slice = blob.slice || blob.webkitSlice || blob.mozSlice;
-		blob = slice.call(blob, 0, blob.size, force_saveable_type);
-	}
-
-	var url = URL.createObjectURL(blob);
-	var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
-	save_link.href = url;
-	save_link.download = filename;
-
-	var event = document.createEvent('MouseEvents');
-	event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
-	save_link.dispatchEvent(event);
-	URL.revokeObjectURL(url);
+	bookManager.exportDB();
 }
